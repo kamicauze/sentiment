@@ -1,0 +1,184 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    
+      <div class="row">
+
+<div class="col-md-1" id="platforms" style="background-color: #cfe0f0">
+
+    <a class="links" href="{{ url_for( 'chart')}}"><img src="static/images/twit.png"></a>
+    <a class="links" href="{{ url_for( 'youtube')}}"><img src="static/images/Youtube-icon.png"></a>
+
+
+</div>
+<div style="background-color:#e05043" class="col-md-4">
+    <div  id="selection">
+     <button class="pos">Positive</button>
+        <button class="neg">Negative</button>
+     <button class="new">Neutral</button>
+
+    </div>
+
+<div id="sents">
+     <div id="neg-posts">
+
+         {% for comment in comments  %}
+
+       {% if comment['sent']=='negative' %}
+            <article class="media content-section">
+            <div class="media-body">
+            <div class="article-metadata">
+            <a class="mr-2" href="#">{{ comment.author }}</a>
+
+
+            </div>
+
+            <p class="article-content">{{ comment.comment }}</p>
+            <p class="article-title">{{ comment.sent }} </p>
+
+
+            </div>
+            </article>
+       {% endif %}
+    {% endfor %}
+
+
+
+     </div>
+
+    <div id="pos-posts">
+
+   {% for comment in comments  %}
+
+       {% if comment['sent']=='positive' %}
+            <article class="media content-section">
+            <div class="media-body">
+            <div class="article-metadata">
+            <a class="mr-2" href="#">{{ comment.author }}</a>
+
+            </div>
+
+            <p class="article-content">{{ comment.comment }}</p>
+            <p class="article-title">{{ comment.sent }} </p>
+
+
+            </div>
+            </article>
+       {% endif %}
+    {% endfor %}
+    </div>
+
+         <div id="new-posts">
+
+         {% for comment in comments  %}
+
+       {% if comment['sent']=='neutral' %}
+            <article class="media content-section">
+            <div class="media-body">
+            <div class="article-metadata">
+
+            </div>
+
+            <p class="article-content">{{ comment.comment }}</p>
+            <p class="article-title">{{ comment.sent }} </p>
+
+            </div>
+            </article>
+       {% endif %}
+    {% endfor %}
+
+
+
+     </div>
+</div>
+</div>
+<div class="col-md-4">
+<div id="analysis">
+    <h1>{{ vidid }}</h1>
+<form action="/youtube" method='post'>
+     <input id="terms" name="text">
+     <input id="search" name="search" value="search" type="submit">
+</form>
+
+
+
+    <canvas id="youChart" width="350" height="350"></canvas>
+
+
+
+
+    <script>
+
+
+
+Chart.defaults.global.responsive = false;
+
+var chartData = {
+  labels : [{% for item in lables %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+
+
+
+      backgroundColor: ["#8e5ea2", "#3cba9f", "#c45850"],
+
+data : {{ vako }}
+  }
+  ]
+
+
+}
+
+
+var ctx = document.getElementById("youChart").getContext("2d");
+
+
+var youChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: chartData,
+    options :{
+
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return  data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                    }
+                }
+            }
+}
+});
+</script>
+
+
+
+ </div>
+
+
+ <div id="vidazo"></div>
+</div>
+
+      <div class="col-md-3" id="videos">
+   {% for video in videos %}
+
+       <div class="video-card" id="{{ video.id }}" >
+
+       <img src="{{ video.thumbnail}}">
+       <div class="vid-name">
+           <span style="font-size: 12px; color: black">{{ video.title }}</span>
+       </div>
+
+       </div>
+
+   {% endfor %}
+
+</div>
+
+
+
+</div>
+
+
+{% endblock content %}

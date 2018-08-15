@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="mail-form" id="mail-form" >
+    <form action="/mail" method="post">
+  subject: <input type="text" name="fname"><br>
+        <span class="labele">message:</span> <textarea type="text" name="story"></textarea><br>
+  <input id="sub" type="submit" value="Send">
+</form>
+
+
+
+</div>
+
+
+{% endblock content %}
